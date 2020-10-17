@@ -3,7 +3,9 @@
 </template>
 
 <script>
-import { defineComponent, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import {
+  defineComponent, onBeforeMount, onMounted, reactive, ref,
+} from 'vue';
 import { useStore } from './store';
 
 export default defineComponent({
@@ -12,8 +14,8 @@ export default defineComponent({
   },
   setup(props, context) {
     const state = reactive({
-      connection: ref(),    // WebSocket
-      originUrl: ref(""),
+      connection: ref(), // WebSocket
+      originUrl: ref(''),
       isLoading: ref(false),
       isConnected: ref(false),
     });
@@ -34,7 +36,7 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      const wsUrl = state.originUrl.replace(/(http)(s)?\:\/\//, "ws$2://");
+      const wsUrl = state.originUrl.replace(/(http)(s)?\:\/\//, 'ws$2://');
       state.connection = connect(`${wsUrl}/services/chat_ws_service`);
 
       state.connection.onopen = (event) => {
@@ -44,20 +46,20 @@ export default defineComponent({
 
       state.connection.onmessage = (event) => {
         store.dispatch('handleWebSocket', event);
-      }
+      };
 
       state.connection.onclose = (event) => {
         state.isConnected = false;
-      }
+      };
     });
 
     return {
       state,
       store,
       connect,
-      fetchConversations
-    }
-  }
+      fetchConversations,
+    };
+  },
 });
 </script>
 

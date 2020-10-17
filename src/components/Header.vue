@@ -38,7 +38,7 @@
         font-size: $font-size-base;
         box-sizing: border-box;
         position: relative;
-        
+
         #{$header}__input {
             width: 100%;
             box-sizing: border-box;

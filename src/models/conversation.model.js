@@ -1,4 +1,4 @@
-import { WTMessage, Message } from "./message.model";
+import { WTMessage, Message } from './message.model';
 
 export class WTConversation {
 //   id: string;
@@ -50,22 +50,18 @@ export class Conversation {
     this.iconUrl = payload.icon_url;
     this.isPublic = payload.is_public;
     this.lastUnreadMessage = payload.last_unread_message;
-    this.lastUnreadMessageDate =
-      new Date(payload.last_unread_message_date) || null;
-    this.participants = payload.participants.map(p => {
-      return {
-        date: new Date(p.date) || null,
-        participantId: p.participant_id,
-        state: p.state
-      };
-    });
-    this.messages = payload.messages.map(m => new Message(m));
+    this.lastUnreadMessageDate = new Date(payload.last_unread_message_date) || null;
+    this.participants = payload.participants.map((p) => ({
+      date: new Date(p.date) || null,
+      participantId: p.participant_id,
+      state: p.state,
+    }));
+    this.messages = payload.messages.map((m) => new Message(m));
     this.messageCount = payload.message_count || this.messages.length;
     this.name = payload.name;
     this.objectId = payload.object_id;
     this.objectName = payload.object_name;
     this.objectType = payload.object_type;
-    this.unreadMessageCount =
-      payload.unread_message || payload.unread_message_count || 0;
+    this.unreadMessageCount = payload.unread_message || payload.unread_message_count || 0;
   }
 }

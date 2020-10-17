@@ -5,23 +5,25 @@
       <ConversationsList />
     </section>
     <section class="chat-app__right-side">
-      
+
     </section>
   </main>
 </template>
 
 <script>
-import { defineComponent, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import {
+  defineComponent, onBeforeMount, onMounted, reactive, ref,
+} from 'vue';
 
-import { useStore } from '../store';
-import ConversationsList from "@/components/ConversationsList.vue";
+import ConversationsList from '@/components/ConversationsList.vue';
 import Header from '@/components/Header.vue';
+import { useStore } from '../store';
 
 export default defineComponent({
   name: 'Main',
   components: {
     Header,
-    ConversationsList
+    ConversationsList,
   },
   setup(props, context) {
     // const state = reactive({
@@ -70,7 +72,7 @@ export default defineComponent({
     //   connect,
     //   fetchConversations
     // }
-  }
+  },
 });
 </script>
 

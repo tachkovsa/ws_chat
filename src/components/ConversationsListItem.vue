@@ -19,18 +19,16 @@ import { defineComponent } from 'vue';
 import moment from 'moment';
 
 export default defineComponent({
-    name: 'ConversationsListItem',
-    props: {
-        conversation: Object
-    },
-    setup(props, context) {
-        const conversation = props?.conversation;
-    },
-    filters: {
-        moment: (date) => {
-            return moment(date);
-        }
-    }
+  name: 'ConversationsListItem',
+  props: {
+    conversation: Object,
+  },
+  setup(props, context) {
+    const conversation = props?.conversation;
+  },
+  filters: {
+    moment: (date) => moment(date),
+  },
 });
 </script>
 

@@ -1,6 +1,6 @@
 {
   "name": "ws_chat",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -33,7 +33,7 @@
     "sass-loader": "^8.0.2"
   },
   "gitHooks": {
-    "pre-commit": "lint-staged"
+    "pre-commit": ""
   },
   "lint-staged": {
     "*.{js,jsx,vue}": [

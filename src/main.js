@@ -4,7 +4,7 @@ import router from './router';
 import store from './store';
 
 createApp(App)
-    .use(store)
-    .use(router)
-    // .use(require('vue-moment'))
-    .mount('#app');
+  .use(store)
+  .use(router)
+// .use(require('vue-moment'))
+  .mount('#app');

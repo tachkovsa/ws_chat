@@ -10,20 +10,20 @@
 import { computed, defineComponent } from 'vue';
 import { useStore } from '../store';
 
-import ConversationsListItem from "./ConversationsListItem.vue";
+import ConversationsListItem from './ConversationsListItem.vue';
 
 export default defineComponent({
   name: 'ConversationsList',
   components: {
-    ConversationsListItem
+    ConversationsListItem,
   },
   setup(props, context) {
     const store = useStore();
     const conversations = computed(() => store.getters.getConversations);
 
-    return { conversations }
-  }
-})
+    return { conversations };
+  },
+});
 </script>
 
 <style scoped lang="scss">
@@ -40,7 +40,7 @@ export default defineComponent({
     &:first-child {
       margin-top: 1rem;
     }
-    
+
     &:last-child {
       margin-bottom: 1rem;
     }

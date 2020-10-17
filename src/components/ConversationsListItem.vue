@@ -8,7 +8,7 @@
             <div class="conversation__last-message-text">{{ conversation.lastUnreadMessage ? conversation.lastUnreadMessage : 'В этом разговоре пока нет сообщений' }}</div>
         </div>
         <div class="conversation__column">
-            <div class="conversation__last-message-date">{{ conversation.lastUnreadMessageDate }}</div>
+            <div class="conversation__last-message-date">{{ lastUnreadMessageDate }}</div>
             <div class="conversation__unread-messages-count">{{ conversation.unreadMessageCount }}</div>
         </div>
     </div>
@@ -26,8 +26,29 @@ export default defineComponent({
   setup(props, context) {
     const conversation = props?.conversation;
   },
-  filters: {
-    moment: (date) => moment(date),
+  computed: {
+      lastUnreadMessageDate() {
+        if (!this.conversation.lastUnreadMessageDate) {
+          return '';
+        }
+
+        let resultFormat = 'DD.MM.YYYY';
+        const now = moment(new Date());
+        const messageDate = moment(this.conversation.lastUnreadMessageDate);
+
+        if (messageDate.year() === now.year()) {
+          if (
+            messageDate.month() === now.month()
+            && messageDate.day() === now.day()
+          ) {
+            resultFormat = 'hh:mm';
+          } else {
+            resultFormat = 'DD.MM';
+          }
+        }
+
+        return moment(this.conversation.lastUnreadMessageDate).format(resultFormat);
+      }
   },
 });
 </script>

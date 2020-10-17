@@ -1,0 +1,23 @@
+@import 'node_modules/include-media/dist/_include-media.scss';
+@import 'node_modules/reset-css/sass/reset';
+
+@import './theme-original.scss';
+
+$breakpoint-phone: 640px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoints: (
+    phone: $breakpoint-phone,
+    tablet: $breakpoint-tablet,
+    desktop: $breakpoint-desktop) !default;
+$header-height: 3rem;
+
+
+body {
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    font-family: $font-family;
+    font-size: $font-size-base;
+    color: $font-color-main;
+}

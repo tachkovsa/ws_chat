@@ -1,30 +1,73 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
   <router-view/>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { defineComponent, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { useStore } from './store';
 
-#nav {
-  padding: 30px;
+export default defineComponent({
+  name: 'App',
+  components: {
+  },
+  setup(props, context) {
+    const state = reactive({
+      connection: ref(),    // WebSocket
+      originUrl: ref(""),
+      isLoading: ref(false),
+      isConnected: ref(false),
+    });
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+    const store = useStore();
 
-    &.router-link-exact-active {
-      color: #42b983;
+    function connect(wsUrl) {
+      return new WebSocket(wsUrl);
+    }
+
+    function fetchConversations() {
+      store.dispatch('fetchConversations', state.connection);
+    }
+
+    onBeforeMount(() => {
+      const url = window.location.href;
+      state.originUrl = new URL(url).origin;
+    });
+
+    onMounted(() => {
+      const wsUrl = state.originUrl.replace(/(http)(s)?\:\/\//, "ws$2://");
+      state.connection = connect(`${wsUrl}/services/chat_ws_service`);
+
+      state.connection.onopen = (event) => {
+        state.isConnected = true;
+        fetchConversations();
+      };
+
+      state.connection.onmessage = (event) => {
+        store.dispatch('handleWebSocket', event);
+      }
+
+      state.connection.onclose = (event) => {
+        state.isConnected = false;
+      }
+    });
+
+    return {
+      state,
+      store,
+      connect,
+      fetchConversations
     }
   }
+});
+</script>
+
+<style lang="scss">
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 </style>

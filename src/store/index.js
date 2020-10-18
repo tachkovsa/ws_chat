@@ -3,6 +3,13 @@ import { Conversation } from '../models/conversation.model';
 
 const state = {
   conversations: [],
+  config: {
+    server: null,
+    user: null,
+  },
+  app: {
+    selectedConversationId: null,
+  },
 };
 
 export const store = createStore({
@@ -10,6 +17,10 @@ export const store = createStore({
   mutations: {
     setConversations(state, payload) {
       state.conversations = payload;
+    },
+
+    selectConversation(state, payload) {
+      state.app.selectedConversationId = payload;
     },
   },
   actions: {
@@ -35,12 +46,18 @@ export const store = createStore({
         }
       });
     },
+
+    selectConversation({ commit, state }, conversationId) {
+      commit('selectConversation', conversationId);
+    }
   },
   getters: {
     getConversations(state) {
       return state.conversations;
     },
     getConversationById: (state) => (id) => state.conversations.filter((c) => c.id === id),
+    getSelectedConversationId(state) {
+      return state.app.selectedConversationId },
   },
   modules: {},
 });

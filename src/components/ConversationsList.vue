@@ -1,6 +1,9 @@
 <template>
   <div class="conversations-list">
-    <div class="conversations-list__item" v-for="conversation of conversations" :key="conversation.id">
+    <div class="conversations-list__item"
+      v-for="conversation of conversations" :key="conversation.id"
+      v-bind:class="{ 'conversations-list__item--selected': conversation.id === selectedConversationId }"
+      @click="selectConversation(conversation.id)">
       <ConversationsListItem v-bind:conversation="conversation" />
     </div>
   </div>
@@ -20,8 +23,17 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore();
     const conversations = computed(() => store.getters.getConversations);
+    const selectedConversationId = computed(() => store.getters.getSelectedConversationId);
 
-    return { conversations };
+    function selectConversation(conversationId) {
+      store.dispatch('selectConversation', conversationId);
+    }
+
+    return {
+      conversations,
+      selectedConversationId,
+      selectConversation
+    };
   },
 });
 </script>
@@ -36,13 +48,26 @@ export default defineComponent({
   &__item {
     padding-left: 1rem;
     padding-right: 1rem;
+    
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $color-backdrop;
+    }
 
     &:first-child {
-      margin-top: 1rem;
+      margin-top: 0.5rem;
     }
 
     &:last-child {
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    &--selected {
+      cursor: default;
+      background-color: $color-backdrop;
     }
   }
 }

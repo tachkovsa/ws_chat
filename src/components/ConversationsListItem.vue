@@ -9,7 +9,7 @@
         </div>
         <div class="conversation__column">
             <div class="conversation__last-message-date">{{ lastUnreadMessageDate }}</div>
-            <div class="conversation__unread-messages-count">{{ conversation.unreadMessageCount }}</div>
+            <div class="conversation__unread-messages-count" v-if="unreadMessageCount !== ''">{{ unreadMessageCount }}</div>
         </div>
     </div>
 </template>
@@ -27,6 +27,17 @@ export default defineComponent({
     const conversation = props?.conversation;
   },
   computed: {
+    unreadMessageCount() {
+      const count = this.conversation.unreadMessageCount;
+      
+      if (count === 0) {
+        return '';
+      } else if (count > 99) {
+        return '99+';
+      } else {
+        return '' + count;
+      }
+    },
       lastUnreadMessageDate() {
         if (!this.conversation.lastUnreadMessageDate) {
           return '';
@@ -57,10 +68,10 @@ export default defineComponent({
 .conversation {
     display: flex;
     box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
 
     &__column {
-        display: flex;
-        flex-direction: column;
         box-sizing: border-box;
         overflow: hidden;
 
@@ -68,17 +79,20 @@ export default defineComponent({
             flex-shrink: 0;
         }
 
-        // TODO: Нужно переделать на CSS Grid - flex-grow криво работает
         &:nth-child(1) {
-            flex-grow: 1;
+          width: 2rem;
         }
 
         &:nth-child(2) {
-            flex-grow: 6;
+          width: 100%;
+          margin-left: 0.5rem;
+          margin-right: 0.5rem;
         }
 
         &:nth-child(3) {
-            flex-grow: 3;
+          flex-shrink: 0;
+          min-width: 2rem;
+          max-width: 4rem;
         }
     }
 
@@ -92,7 +106,7 @@ export default defineComponent({
 
     &__name {
         font-size: $font-size-base;
-        color: $color-primary;
+        color: $font-color-main;
         box-sizing: border-box;
         white-space: nowrap;
         overflow: hidden;
@@ -102,11 +116,33 @@ export default defineComponent({
     &__last-message- {
         &text {
             font-size: $font-size-small;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          color: $font-color-main;
+          margin-top: 0.25rem;
         }
 
         &date {
-            font-size: $font-size-small;
+            font-size: $font-size-smaller;
+            text-align: right;
+            color: $font-color-secondary;
         }
+    }
+
+    &__unread-messages-count {
+      margin-top: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: $color-primary;
+      color: $font-color-space;
+      margin-left: auto;
+      font-size: $font-size-smallest;
+      box-sizing: border-box;
+      width: $font-size-big;
+      height: $font-size-big;
+      border-radius: 50%;
     }
 }
 </style>

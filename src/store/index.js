@@ -47,6 +47,15 @@ export const store = createStore({
         switch (action) {
           case 'get_my_conversations':
             const fetchedConversations = d.conversations.map((c) => new Conversation(c)) || []; // TODO: map()
+            fetchedConversations.sort((a, b) => {
+              if (!isNaN(b.lastUnreadMessageDate.getTime()) && !isNaN(a.lastUnreadMessageDate.getTime())) {
+                return b.lastUnreadMessageDate?.getTime() - a.lastUnreadMessageDate?.getTime()
+              } else if (!isNaN(b.lastUnreadMessageDate.getTime())) {
+                return 1;
+              } else {
+                return -1;
+              }
+            });
 
             commit('setConversations', fetchedConversations);
             commit('setConversationLoadingState', true);

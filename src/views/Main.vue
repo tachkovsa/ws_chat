@@ -89,6 +89,7 @@ export default defineComponent({
 
     @include media(">=tablet") {
       width: 30%;
+      max-width: 30%;
     }
   }
 
@@ -96,6 +97,11 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+  
+    @include media(">=tablet") {
+      width: 70%;
+      max-width: 70%;
+    }
   }
 }
 </style>

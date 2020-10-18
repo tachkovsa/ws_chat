@@ -8,6 +8,7 @@ const state = {
     user: null,
   },
   app: {
+    conversationsLoaded: false,
     selectedConversationId: null,
   },
 };
@@ -22,9 +23,14 @@ export const store = createStore({
     selectConversation(state, payload) {
       state.app.selectedConversationId = payload;
     },
+
+    setConversationLoadingState(state, payload) {
+      state.app.conversationsLoaded = payload;
+    },
   },
   actions: {
     fetchConversations({ commit, state }, ws, objectType) {
+      commit('setConversationLoadingState', false);
       ws.send(
         JSON.stringify({
           action: 'get_my_conversations',
@@ -43,6 +49,7 @@ export const store = createStore({
             const fetchedConversations = d.conversations.map((c) => new Conversation(c)) || []; // TODO: map()
 
             commit('setConversations', fetchedConversations);
+            commit('setConversationLoadingState', true);
         }
       });
     },
@@ -52,12 +59,10 @@ export const store = createStore({
     }
   },
   getters: {
-    getConversations(state) {
-      return state.conversations;
-    },
-    getConversationById: (state) => (id) => state.conversations.filter((c) => c.id === id),
-    getSelectedConversationId(state) {
-      return state.app.selectedConversationId },
+    getConversationLoading: (state) => state.app.conversationsLoaded,
+    getConversations: (state) => state.conversations,
+    getConversationById: (state, getters) => (id) => getters.getConversations.find((c) => c.id === id),
+    getSelectedConversationId: (state) => state.app.selectedConversationId,
   },
   modules: {},
 });

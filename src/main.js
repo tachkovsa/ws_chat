@@ -1,7 +1,7 @@
 import { createApp, Plugin } from 'vue';
 import App from './App.vue';
-import router from './router';
-import store from './store';
+import { router } from './router';
+import { store } from './store';
 
 // TODO: Need ref in future, coz of devtools isn't working correctly
 // const devtools = {

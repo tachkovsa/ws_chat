@@ -1,11 +1,16 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+
 import Main from '../views/Main.vue';
+import Conversation from '../components/Conversation.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Main',
     component: Main,
+    children: [
+      { path: '/conversation/:id', component: Conversation }
+    ]
   },
   // {
   //   path: '/about',
@@ -17,9 +22,11 @@ const routes = [
   // },
 ];
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHashHistory(), // process.env.BASE_URL
   routes,
 });
 
-export default router;
+export function useRouter() {
+  return router;
+}

@@ -34,12 +34,8 @@
       <MessagesList :messages="conversation.messages" />
     </div>
     <div class="conversation__new-message">
-
+      <OutputMessage @sendMessage="sendMessage($event)" />
     </div>
-    <!-- <form class="conversation__send-form">
-      <input type="text" />
-      <button type="submit"></button>
-    </form> -->
   </section>
 </template>
 
@@ -51,12 +47,14 @@ import { useStore } from "../store";
 import ConversationsListItemVue from "./ConversationsListItem.vue";
 import Loader from "./Loader.vue";
 import MessagesList from "./MessagesList.vue";
+import OutputMessage from "./OutputMessage.vue";
 
 export default defineComponent({
   name: "Conversation",
   components: {
     Loader,
-    MessagesList
+    MessagesList,
+    OutputMessage
   },
   setup(props, context) {
     const store = useStore();
@@ -70,6 +68,10 @@ export default defineComponent({
     const conversationId = computed(() => {
       return useRoute().params.id;
     });
+
+    const sendMessage = (message) => {
+      console.log('Conversation ->', message);
+    }
 
     // watch(() => props.someprops, () => {
     //   // Do smth...
@@ -91,7 +93,8 @@ export default defineComponent({
       conversationId,
       isLoaded,
       // getConversationById,
-      conversation
+      conversation,
+      sendMessage,
     };
   }
 });

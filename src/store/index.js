@@ -6,7 +6,7 @@ const state = {
   config: {
     server: null,
     user: {
-      id: '6609984536017445749'  // TODO: Fetch ID via API, for now it's user73 / 73user
+      id: '6148914691236517121'  // TODO: Fetch ID via API, for now it's user73 / 73user
     },
   },
   app: {

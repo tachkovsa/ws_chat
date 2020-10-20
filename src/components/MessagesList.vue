@@ -1,6 +1,19 @@
 <template>
   <section class="messages-list">
-    <MessagesListItem v-for="message of messages" :key="message.id" :message="message" />
+    <div
+      class="messages-list__item"
+      v-for="(message, index) of messages"
+      :key="message.id"
+      v-bind:class="{
+        'messages-list__item--no-margin-top': isSameAuthor(messages[index - 1], message)
+      }"
+    >
+      <MessagesListItem
+        :message="message"
+        :userId="userId"
+        :sameAuthor="isSameAuthor(messages[index - 1], message)"
+      />
+    </div>
   </section>
 </template>
 
@@ -19,13 +32,16 @@ export default defineComponent({
     MessagesListItem
   },
   props: {
-    messages: []
+    messages: Array
   },
   setup(props, context) {
     const store = useStore();
     const router = useRouter();
 
+    const userId = computed(() => store.getters.getCurrentUserId);
     const messages = ref([]);
+
+    const isSameAuthor = (previous, current) => previous?.sender?.id === current?.sender?.id;
 
     watch(
       () => props.messages,
@@ -33,7 +49,9 @@ export default defineComponent({
     );
 
     return {
-      messages
+      messages,
+      userId,
+      isSameAuthor
     };
   }
 });
@@ -48,5 +66,17 @@ export default defineComponent({
   box-sizing: border-box;
   overflow-x: hidden;
   overflow-y: auto;
+
+  &__item {
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    &--no-margin-top {
+      margin-top: -0.5rem;
+    }
+  }
 }
 </style>

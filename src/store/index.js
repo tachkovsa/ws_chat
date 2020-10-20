@@ -5,7 +5,9 @@ const state = {
   conversations: [],
   config: {
     server: null,
-    user: null,
+    user: {
+      id: '6609984536017445749'  // TODO: Fetch ID via API, for now it's user73 / 73user
+    },
   },
   app: {
     conversationsLoaded: false,
@@ -72,6 +74,8 @@ export const store = createStore({
     getConversations: (state) => state.conversations,
     getConversationById: (state, getters) => (id) => getters.getConversations.find((c) => c.id === id),
     getSelectedConversationId: (state) => state.app.selectedConversationId,
+
+    getCurrentUserId: (state) => state.config.user.id,
   },
   modules: {},
 });

@@ -70,8 +70,28 @@ export default defineComponent({
     });
 
     const sendMessage = (message) => {
-      console.log('Conversation ->', message);
+      const outputMessage = {
+        conversation_id: conversationId.value,
+        message_text: message.text,
+        message_type: message.type || 'message'
+      }
+      if (message.recipients) {
+        outputMessage.recipients = `[${message.recipients.map(r => `"${r}"`).join(',')}]`;
+      }
+
+      store.dispatch('sendMessage', outputMessage);
     }
+
+    // let outputMessage: OutputMessage = {
+    //   conversation_id: this.currentConversation.id,
+    //   message_text: message.text,
+    //   message_type: message.type ? message.type : 'message'
+    // };
+    // if (message.recipients) {
+    //   outputMessage.message_recipients = `[${message.recipients.map(r => `"${r}"`).join(',')}]`;
+    // }
+
+    // this.connection$.next({ action: 'send_message', ...outputMessage });
 
     // watch(() => props.someprops, () => {
     //   // Do smth...

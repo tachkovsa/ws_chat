@@ -39,5 +39,16 @@ export class Message {
     };
     this.text = payload.text;
     this.typeId = payload.type_id;
+    // TODO: Need ref
+    this.conversation = payload.conversation ? {
+      id: payload.conversation.id,
+      lastUnreadMessage: payload.last_unread_message,
+      lastUnreadMessageDate: new Date(payload.last_unread_message_date) || null,
+      name: payload.name,
+      iconUrl: payload.icon_url,
+      objectId: payload.object_id,
+      objectType: payload.object_type,
+      unreadMessageCount: payload.unread_message || payload.unread_message_count || 0
+    } : null;
   }
 }

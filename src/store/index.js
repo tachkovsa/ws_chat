@@ -12,33 +12,49 @@ const state = {
   app: {
     conversationsLoaded: false,
     selectedConversationId: null,
+    connection: null,
+    isConnected: false,
   },
 };
 
 export const store = createStore({
   state,
   mutations: {
+    setConnection(state, payload) {
+      state.app.connection = payload;
+    },
+    setConnectionState(state, payload) {
+      state.app.isConnected = payload;
+    },
+
     setConversations(state, payload) {
       state.conversations = payload;
     },
-
     selectConversation(state, payload) {
       state.app.selectedConversationId = payload;
     },
-
     setConversationLoadingState(state, payload) {
       state.app.conversationsLoaded = payload;
     },
   },
   actions: {
-    fetchConversations({ commit, state }, ws, objectType) {
+    connect({ commit, state }, { url }) {
+      const connection = new WebSocket(url);
+      
+      connection.onopen = (event) => commit('setConnectionState', true);
+      connection.onclose = (event) => commit('setConnectionState', false);
+      connection.onmessage = (event) => store.dispatch('handleWebSocket', event);
+      commit('setConnection', connection);
+    },
+
+    fetchConversations({ commit, state }, objectType) {
       commit('setConversationLoadingState', false);
-      ws.send(
-        JSON.stringify({
-          action: 'get_my_conversations',
-          object_type: objectType,
-        }),
-      );
+      store.dispatch('sendWebSocket', { action: 'get_my_conversations', objectType });
+    },
+    sendWebSocket({ commit, state }, payload) {
+      const connection = state.app.connection;
+      const jsonPayload = JSON.stringify(payload);
+      connection.send(jsonPayload);
     },
     handleWebSocket({ commit, state }, message) {
       const data = JSON.parse(message?.data) || null;
@@ -64,12 +80,17 @@ export const store = createStore({
         }
       });
     },
-
     selectConversation({ commit, state }, conversationId) {
       commit('selectConversation', conversationId);
+    },
+    sendMessage({ commit, state }, message) {
+      store.dispatch('sendWebSocket', message);
     }
   },
   getters: {
+    getConnection: (state) => state.app.connection,
+    getConnectionState: (state) => state.app.isConnected,
+
     getConversationLoading: (state) => state.app.conversationsLoaded,
     getConversations: (state) => state.conversations,
     getConversationById: (state, getters) => (id) => getters.getConversations.find((c) => c.id === id),

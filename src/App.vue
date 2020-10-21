@@ -4,7 +4,7 @@
 
 <script>
 import {
-  defineComponent, onBeforeMount, onMounted, reactive, ref,
+  defineComponent, onBeforeMount, onMounted, reactive, ref, watch, computed
 } from 'vue';
 import { useStore } from './store';
 
@@ -13,21 +13,30 @@ export default defineComponent({
   components: {
   },
   setup(props, context) {
-    const state = reactive({
-      connection: ref(), // WebSocket
-      originUrl: ref(''),
-      isLoading: ref(false),
-      isConnected: ref(false),
-    });
-
     const store = useStore();
 
-    function connect(wsUrl) {
-      return new WebSocket(wsUrl);
+    const state = reactive({
+      connection: ref(store.getters.getConnection), // WebSocket
+      originUrl: ref(''),
+      isLoading: ref(false),
+      isConnected: computed(() => store.getters.getConnectionState),
+    });
+
+    watch(
+      () => state.isConnected,
+      (current, previous) => {
+        if (current && !previous) {
+          fetchConversations();
+        }
+      }
+    );
+
+    function connect(url) {
+      store.dispatch('connect', { url });
     }
 
     function fetchConversations() {
-      store.dispatch('fetchConversations', state.connection);
+      store.dispatch('fetchConversations');
     }
 
     onBeforeMount(() => {
@@ -37,20 +46,20 @@ export default defineComponent({
 
     onMounted(() => {
       const wsUrl = state.originUrl.replace(/(http)(s)?\:\/\//, 'ws$2://');
-      state.connection = connect(`${wsUrl}/services/chat_ws_service`);
+      connect(`${wsUrl}/services/chat_ws_service`);
 
-      state.connection.onopen = (event) => {
-        state.isConnected = true;
-        fetchConversations();
-      };
+      // state.connection.onopen = (event) => {
+      //   state.isConnected = true;
+      //   fetchConversations();
+      // };
 
-      state.connection.onmessage = (event) => {
-        store.dispatch('handleWebSocket', event);
-      };
+      // state.connection.onmessage = (event) => {
+      //   store.dispatch('handleWebSocket', event);
+      // };
 
-      state.connection.onclose = (event) => {
-        state.isConnected = false;
-      };
+      // state.connection.onclose = (event) => {
+      //   state.isConnected = false;
+      // };
     });
 
     return {

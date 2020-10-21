@@ -30,8 +30,8 @@
     <div class="conversation__loader" v-if="!isLoaded">
       <Loader />
     </div>
-    <div class="conversation__messages" v-else-if="conversation?.messages">
-      <MessagesList :messages="conversation.messages" />
+    <div class="conversation__messages" v-else-if="messages">
+      <MessagesList :messages="messages" />
     </div>
     <div class="conversation__new-message">
       <OutputMessage @sendMessage="sendMessage($event)" />
@@ -68,6 +68,7 @@ export default defineComponent({
     const conversationId = computed(() => {
       return useRoute().params.id;
     });
+    const messages = computed(() => store.getters.getSortedConversationMessages(conversationId?.value));
 
     const sendMessage = (message) => {
       const outputMessage = {
@@ -115,6 +116,7 @@ export default defineComponent({
       // getConversationById,
       conversation,
       sendMessage,
+      messages,
     };
   }
 });

@@ -83,33 +83,6 @@ export default defineComponent({
       store.dispatch('sendMessage', outputMessage);
     }
 
-    // let outputMessage: OutputMessage = {
-    //   conversation_id: this.currentConversation.id,
-    //   message_text: message.text,
-    //   message_type: message.type ? message.type : 'message'
-    // };
-    // if (message.recipients) {
-    //   outputMessage.message_recipients = `[${message.recipients.map(r => `"${r}"`).join(',')}]`;
-    // }
-
-    // this.connection$.next({ action: 'send_message', ...outputMessage });
-
-    // watch(() => props.someprops, () => {
-    //   // Do smth...
-    // })
-
-    // const conversation = computed(() => {
-    //   const conv = store.getters.getConversationById(store.getters.getSelectedConversationId);
-    //   console.log(conversationId, conv);
-    //   return
-    // });
-
-    // function getConversationById(conversationId) {
-    //   const conversation = store.getters.getConversationById(conversationId);
-    //   console.log('get', conversationId, conversation);
-    //   return conversation;
-    // }
-
     return {
       conversationId,
       isLoaded,

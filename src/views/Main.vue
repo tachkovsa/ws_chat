@@ -75,8 +75,7 @@ export default defineComponent({
   border-radius: 0.25rem;
 
   @include media(">=desktop") {
-    min-width: 1024px;
-    max-width: 1200px;
+    width: 90%;
     height: 90%;
     border: 1px solid $color-border;
   }

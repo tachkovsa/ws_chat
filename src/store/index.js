@@ -2,8 +2,9 @@ import { createStore } from "vuex";
 import { Conversation } from "../models/conversation.model";
 import { Message } from "../models/message.model";
 
+import conversations from './conversations';
+
 const state = {
-  conversations: [],
   config: {
     server: null,
     user: {
@@ -11,8 +12,8 @@ const state = {
     }
   },
   app: {
-    conversationsLoaded: false,
-    selectedConversationId: null,
+    // conversationsLoaded: false,
+    // selectedConversationId: null,
     connection: null,
     isConnected: false
   }
@@ -27,32 +28,6 @@ export const store = createStore({
     setConnectionState(state, payload) {
       state.app.isConnected = payload;
     },
-
-    setConversations(state, payload) {
-      state.conversations = payload;
-    },
-    updateConversation(state, payload) {
-      const conversationIndex = state.conversations.findIndex(c => c.id === payload.id);
-      if (conversationIndex) {
-        const conversation = state.conversations[conversationIndex].update(payload);
-        state.conversations.splice(conversationIndex, 1, conversation);
-      }
-    },
-    addMessage(state, payload) {
-      const conversationId = payload.conversation?.id;
-      const conversationIndex = state.conversations.findIndex(c => c.id === conversationId);
-      if (conversationIndex) {
-        const conversation = state.conversations[conversationIndex].update(payload.conversation);
-        conversation.messages.push(payload);
-        state.conversations.splice(conversationIndex, 1, conversation);
-      }
-    },
-    selectConversation(state, payload) {
-      state.app.selectedConversationId = payload;
-    },
-    setConversationLoadingState(state, payload) {
-      state.app.conversationsLoaded = payload;
-    }
   },
   actions: {
     connect({ commit, state }, { url }) {
@@ -62,11 +37,6 @@ export const store = createStore({
       connection.onclose = event => commit("setConnectionState", false);
       connection.onmessage = event => store.dispatch("handleWebSocket", event);
       commit("setConnection", connection);
-    },
-
-    fetchConversations({ commit, state }, objectType) {
-      commit("setConversationLoadingState", false);
-      store.dispatch("sendWebSocket", { action: "get_my_conversations", objectType });
     },
     sendWebSocket({ commit, state }, payload) {
       const connection = state.app.connection;
@@ -110,48 +80,16 @@ export const store = createStore({
         }
       });
     },
-    selectConversation({ commit, state }, conversationId) {
-      commit("selectConversation", conversationId);
-    },
-    sendMessage({ commit, state }, message) {
-      store.dispatch("sendWebSocket", {
-        action: "send_message",
-        ...message
-      });
-    }
   },
   getters: {
     getConnection: state => state.app.connection,
     getConnectionState: state => state.app.isConnected,
 
-    getConversationLoading: state => state.app.conversationsLoaded,
-    getConversations: state => state.conversations,
-    getConversationById: (state, getters) => id => getters.getConversations.find(c => c.id === id),
-    getSelectedConversationId: state => state.app.selectedConversationId,
-    getConversationMessages: (state, getters) => id => {
-      const conversation = getters.getConversationById(id);
-      return conversation ? conversation.messages : [];
-    },
-    getSortedConversationMessages: (state, getters) => id => {
-      const messages = getters.getConversationMessages(id);
-      console.log('sorted...');
-      return messages.sort((a, b) => {
-        if (
-          !isNaN(b.createDate.getTime()) &&
-          !isNaN(a.createDate.getTime())
-        ) {
-          return b.createDate?.getTime() - a.createDate?.getTime();
-        } else if (!isNaN(b.createDate.getTime())) {
-          return 1;
-        } else {
-          return -1;
-        }
-      }).reverse();
-    },
-
     getCurrentUserId: state => state.config.user.id
   },
-  modules: {}
+  modules: {
+    conversations
+  }
 });
 
 export function useStore() {

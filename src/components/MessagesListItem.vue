@@ -1,12 +1,20 @@
 <template>
-  <div class="message"
+  <div
+    class="message"
+    v-bind:id="'message_' + message.id"
     v-bind:class="{
-        'message--is-own': isOwn,
-        'message--same-author': sameAuthor
-    }">
-    <div class="message__icon" v-bind:style="{ 'background-image': 'url(' + message.sender?.iconUrl + ')' }"></div>
+      'message--is-own': isOwn,
+      'message--same-author': sameAuthor,
+      'message--system': isSystem
+    }"
+  >
+    <div
+      class="message__icon"
+      v-if="!isSystem"
+      v-bind:style="{ 'background-image': 'url(' + message.sender?.iconUrl + ')' }"
+    ></div>
     <div class="message__info">
-      <div class="message__header">
+      <div class="message__header" v-if="!isSystem">
         <div class="message__owner">{{ message.sender?.dispName }}</div>
         <div class="message__date">{{ messageDate }}</div>
         <div class="message__menu">
@@ -33,7 +41,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, watch, ref } from "vue";
+import { computed, defineComponent, watch, ref, onMounted } from "vue";
 import moment from "moment";
 
 import { Message } from "../models/message.model";
@@ -42,16 +50,19 @@ export default defineComponent({
   name: "MessagesListItem",
   components: {},
   props: {
+    isLast: Boolean,
     message: Object,
     userId: String,
     sameAuthor: Boolean
   },
   setup(props, context) {
+    const isLast = props?.isLast || false;
     const message = props?.message;
     const userId = props?.userId;
     const sameAuthor = props?.sameAuthor;
 
     const isOwn = computed(() => message.sender?.id === userId);
+    const isSystem = computed(() => message.typeId === "system");
 
     const messageDate = computed(() => {
       if (!message.createDate) {
@@ -73,11 +84,18 @@ export default defineComponent({
       return messageDate.format(resultFormat);
     });
 
+    onMounted(() => {
+      if (isLast) {
+        context.emit("lastMessageRendered", message.id);
+      }
+    });
+
     return {
       message,
       isOwn,
       sameAuthor,
       messageDate,
+      isSystem
     };
   }
 });
@@ -89,19 +107,41 @@ export default defineComponent({
 
   display: flex;
 
+  @include media("<tablet") {
+    max-width: 85%;
+  }
+
+  @include media(">=tablet") {
+    max-width: 65%;
+  }
+
+  @include media(">=desktop") {
+    max-width: 50%;
+  }
+
   &:hover {
     #{$message}__menu {
       visibility: visible;
     }
   }
 
+  &--system {
+    margin-left: auto;
+    margin-right: auto;
+
+    color: $font-color-secondary;
+  }
+
   &--is-own {
     flex-direction: row-reverse;
+    margin-left: auto;
 
-    #{$message}__icon { display: none; }
+    #{$message}__icon {
+      display: none;
+    }
 
     #{$message}__body {
-      background-color: #FFFFFF;
+      background-color: #ffffff;
     }
 
     #{$message}__info {
@@ -113,9 +153,13 @@ export default defineComponent({
       flex-direction: row-reverse;
     }
 
-    #{$message}__owner { display: none; }
+    #{$message}__owner {
+      display: none;
+    }
 
-    #{$message}__date { margin-right: 0; }
+    #{$message}__date {
+      margin-right: 0;
+    }
 
     #{$message}__menu {
       margin-left: 0;
@@ -124,13 +168,15 @@ export default defineComponent({
   }
 
   &--same-author {
-    #{$message}__header { display: none; }
+    #{$message}__header {
+      display: none;
+    }
   }
-  
+
   &__icon {
     display: flex;
     flex-shrink: 0;
-    
+
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
@@ -179,7 +225,7 @@ export default defineComponent({
   }
 
   &__text {
-    font-size: $font-size-small;
+    font-size: $font-size-smaller;
   }
 }
 </style>

@@ -12,13 +12,15 @@
         :message="message"
         :userId="userId"
         :sameAuthor="isSameAuthor(messages[index - 1], message)"
+        :isLast="index === (messages.length - 1)"
+        @lastMessageRendered="onLastMessageRendered($event)"
       />
     </div>
   </section>
 </template>
 
 <script>
-import { computed, defineComponent, watch, ref } from "vue";
+import { computed, defineComponent, watch, ref, onMounted } from "vue";
 import { useStore } from "../store";
 import { useRouter } from "../router";
 
@@ -48,10 +50,24 @@ export default defineComponent({
       (first, second) => (messages.value = first)
     );
 
+    // TODO: Check current user scroll position
+    function onLastMessageRendered(messageId) {
+      scrollToMessage(messageId);
+    }
+
+    function scrollToMessage(messageId) {
+      const messageEl = document.getElementById(`message_${messageId}`);
+      if (messageEl) {
+        messageEl.scrollIntoView();
+      }
+    }
+
     return {
       messages,
       userId,
-      isSameAuthor
+      isSameAuthor,
+      onLastMessageRendered,
+      scrollToMessage,
     };
   }
 });
@@ -68,13 +84,15 @@ export default defineComponent({
   overflow-y: auto;
 
   &__item {
+    display: flex;
+
     padding-left: 1rem;
     padding-right: 1rem;
 
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 
-    &--no-margin-top {
+    &--no-margin-top:not(:first-child) {
       margin-top: -0.5rem;
     }
   }

@@ -33,6 +33,23 @@
         </div>
       </div>
       <div class="message__body">
+        <div
+          class="message__images"
+          v-if="images.length > 0"
+          v-bind:class="{ 'message__images--wo-text': !message.hasText }"
+        >
+          <div
+            class="file"
+            v-for="(image, index) of imagesForDisplay"
+            :key="image.id"
+            v-bind:class="'file--img'"
+          >
+            <img class="file__image" v-bind:src="image.url" />
+            <div v-if="index === 3 && moreThanFour" class="file__cover">
+              <div class="file__more">+{{ (images.length - imagesForDisplay.length) }}</div>
+            </div>
+          </div>
+        </div>
         <div class="message__text">{{ message.text }}</div>
         <!-- message buttons -->
       </div>
@@ -84,6 +101,10 @@ export default defineComponent({
       return messageDate.format(resultFormat);
     });
 
+    const images = message.files.filter(f => f.type === 'img');
+    const imagesForDisplay = images.slice(0, 4);
+    const moreThanFour = images.length > 4;
+
     onMounted(() => {
       if (isLast) {
         context.emit("lastMessageRendered", message.id);
@@ -95,7 +116,10 @@ export default defineComponent({
       isOwn,
       sameAuthor,
       messageDate,
-      isSystem
+      isSystem,
+      images,
+      moreThanFour,
+      imagesForDisplay,
     };
   }
 });
@@ -106,6 +130,7 @@ export default defineComponent({
   $message: &;
 
   display: flex;
+  box-sizing: border-box;
 
   @include media("<tablet") {
     max-width: 85%;
@@ -219,13 +244,78 @@ export default defineComponent({
     flex-direction: column;
     border: 1px solid $color-space;
     margin-top: 0.25rem;
-    padding: 0.8rem 1rem;
+    padding: 0.143rem;
+    // padding: 0.8rem 1rem;
     border-radius: 0.5rem;
     background-color: $color-space;
   }
 
   &__text {
     font-size: $font-size-smaller;
+    // padding: 0.8rem 1rem;
+    padding: 0.571rem;
+  }
+
+  &__images {
+    display: grid;
+    grid-template-columns: 7.6rem 7.6rem;
+    grid-gap: 0.143rem;
+
+    &--wo-text {
+      margin-bottom: 0;
+    }
+
+    .file {
+      display: flex;
+      position: relative;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &__more {
+        position: absolute;
+        z-index: 2;
+      }
+
+      &__cover {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        font-size: $font-size-biggest;
+        color: $font-color-space;
+        width: 100%;
+        height: 100%;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-color: $font-color-dark;
+          opacity: 0.5;
+          z-index: 1;
+        }
+      }
+
+      &--img {
+        width: 7.6rem;
+        height: 7.6rem;
+        box-sizing: border-box;
+        overflow: hidden;
+        border-radius: 0.5rem;
+        // margin: 0.143rem;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
   }
 }
 </style>

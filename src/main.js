@@ -1,4 +1,6 @@
 import { createApp, Plugin } from 'vue';
+// import VueImg from 'v-img/lib';
+
 import App from './App.vue';
 import { router } from './router';
 import { store } from './store';
@@ -14,5 +16,6 @@ import { store } from './store';
 
 const app = createApp(App);
 // app.use(devtools);
+// app.use(VueImg);
 app.use(store).use(router).mount('#app');
 // .use(require('vue-moment'))

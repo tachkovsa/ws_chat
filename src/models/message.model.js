@@ -37,8 +37,16 @@ export class Message {
       dispName: payload.sender?.disp_name,
       iconUrl: payload.sender?.icon_url,
     };
-    this.text = payload.text;
+    this.text = String(payload.text).trim();
     this.typeId = payload.type_id;
     this.conversation = payload.conversation;
+  }
+
+  get hasFiles() {
+    return this.files?.length > 0 || false;
+  }
+
+  get hasText() {
+    return this.text !== '';
   }
 }

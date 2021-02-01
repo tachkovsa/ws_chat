@@ -4,7 +4,7 @@
 
 <script>
 import {
-  defineComponent, onBeforeMount, onMounted, reactive, ref, watch, computed
+  defineComponent, onBeforeMount, onMounted, reactive, ref, watch, computed, provide
 } from 'vue';
 import { useStore } from './store';
 
@@ -13,6 +13,8 @@ export default defineComponent({
   components: {
   },
   setup(props, context) {
+    provide('$window', window);
+
     const store = useStore();
 
     const state = reactive({

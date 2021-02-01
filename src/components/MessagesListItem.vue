@@ -35,8 +35,12 @@
       <div class="message__body">
         <div
           class="message__images"
-          v-if="images.length > 0"
-          v-bind:class="{ 'message__images--wo-text': !message.hasText }"
+          v-if="imagesForDisplay.length > 0"
+          v-bind:class="{
+            'message__images--wo-text': !message.hasText,
+            'message__images--1': imagesForDisplay.length === 1,
+            'message-images--3': imagesForDisplay.length === 3
+          }"
         >
           <div
             class="file"
@@ -45,12 +49,13 @@
             v-bind:class="'file--img'"
           >
             <img class="file__image" v-bind:src="image.url" />
-            <div v-if="index === 3 && moreThanFour" class="file__cover">
-              <div class="file__more">+{{ (images.length - imagesForDisplay.length) }}</div>
+            <div v-if="index === 3 && moreThanFourImages" class="file__cover">
+              <div class="file__more">+{{ images.length - imagesForDisplay.length }}</div>
             </div>
           </div>
         </div>
-        <div class="message__text">{{ message.text }}</div>
+        <div class="message__files"></div>
+        <div class="message__text" v-if="message.hasText" v-html="message.text"></div>
         <!-- message buttons -->
       </div>
     </div>
@@ -58,13 +63,13 @@
 </template>
 
 <script>
-import { computed, defineComponent, watch, ref, onMounted } from "vue";
-import moment from "moment";
+import { computed, defineComponent, watch, ref, onMounted } from 'vue';
+import moment from 'moment';
 
-import { Message } from "../models/message.model";
+import { Message } from '../models/message.model';
 
 export default defineComponent({
-  name: "MessagesListItem",
+  name: 'MessagesListItem',
   components: {},
   props: {
     isLast: Boolean,
@@ -79,22 +84,22 @@ export default defineComponent({
     const sameAuthor = props?.sameAuthor;
 
     const isOwn = computed(() => message.sender?.id === userId);
-    const isSystem = computed(() => message.typeId === "system");
+    const isSystem = computed(() => message.typeId === 'system');
 
     const messageDate = computed(() => {
       if (!message.createDate) {
-        return "";
+        return '';
       }
 
-      let resultFormat = "DD.MM.YYYY hh:mm";
+      let resultFormat = 'DD.MM.YYYY hh:mm';
       const now = moment(new Date());
       const messageDate = moment(message.createDate);
 
       if (messageDate.year() === now.year()) {
         if (messageDate.month() === now.month() && messageDate.day() === now.day()) {
-          resultFormat = "hh:mm";
+          resultFormat = 'hh:mm';
         } else {
-          resultFormat = "DD.MM hh:mm";
+          resultFormat = 'DD.MM hh:mm';
         }
       }
 
@@ -103,11 +108,13 @@ export default defineComponent({
 
     const images = message.files.filter(f => f.type === 'img');
     const imagesForDisplay = images.slice(0, 4);
-    const moreThanFour = images.length > 4;
+    const moreThanFourImages = images.length > 4;
+
+    const files = message.files.filter(f => f.type !== 'img');
 
     onMounted(() => {
       if (isLast) {
-        context.emit("lastMessageRendered", message.id);
+        context.emit('lastMessageRendered', message.id);
       }
     });
 
@@ -118,8 +125,8 @@ export default defineComponent({
       messageDate,
       isSystem,
       images,
-      moreThanFour,
-      imagesForDisplay,
+      moreThanFourImages,
+      imagesForDisplay
     };
   }
 });
@@ -132,15 +139,15 @@ export default defineComponent({
   display: flex;
   box-sizing: border-box;
 
-  @include media("<tablet") {
+  @include media('<tablet') {
     max-width: 85%;
   }
 
-  @include media(">=tablet") {
+  @include media('>=tablet') {
     max-width: 65%;
   }
 
-  @include media(">=desktop") {
+  @include media('>=desktop') {
     max-width: 50%;
   }
 
@@ -258,8 +265,28 @@ export default defineComponent({
 
   &__images {
     display: grid;
-    grid-template-columns: 7.6rem 7.6rem;
+    grid-template-columns: minmax(0, 7.6rem) minmax(0, 7.6rem);
     grid-gap: 0.143rem;
+
+    &--1 {
+      grid-template-columns: calc(7.6rem * 2);
+      grid-row: calc(7.6rem * 2);
+      grid-gap: 0;
+
+      div.file--img {
+        width: calc(7.6rem * 2);
+        height: calc(7.6rem * 2);
+      }
+    }
+
+    &--3 {
+      grid-row: 2 / 1;
+
+      div.file--img:nth-child(3) {
+        width: calc(7.6rem * 2);
+        height: calc(7.6rem * 2);
+      }
+    }
 
     &--wo-text {
       margin-bottom: 0;

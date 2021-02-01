@@ -15,6 +15,10 @@ import { store } from './store';
 // };
 
 const app = createApp(App);
+// app.config.globalProperties.window = window;
+
+// console.log(app.config)
+
 // app.use(devtools);
 // app.use(VueImg);
 app.use(store).use(router).mount('#app');

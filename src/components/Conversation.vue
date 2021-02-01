@@ -188,7 +188,7 @@ export default defineComponent({
   &__new-message {
     display: flex;
     box-sizing: border-box;
-    height: 3rem;
+    min-height: 3rem;
     border-top: 1px solid $color-border;
     margin-top: auto;
     flex-shrink: 0;

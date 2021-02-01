@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 import Main from '../views/Main.vue';
+import Teleconference from '../views/Teleconference.vue';
 import Conversation from '../components/Conversation.vue';
 
 const routes = [
@@ -12,6 +13,11 @@ const routes = [
       { path: '/conversation/:id', component: Conversation }
     ]
   },
+  {
+    path: '/teleconference/:id',
+    name: 'Teleconference',
+    component: Teleconference
+  }
   // {
   //   path: '/about',
   //   name: 'About',

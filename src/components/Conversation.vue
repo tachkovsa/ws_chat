@@ -34,7 +34,7 @@
       <MessagesList :messages="messages" />
     </div>
     <div class="conversation__new-message">
-      <OutputMessage @sendMessage="sendMessage($event)" />
+      <MessageOutput @sendMessage="sendMessage($event)" />
     </div>
   </section>
 </template>
@@ -47,14 +47,14 @@ import { useStore } from "../store";
 import ConversationsListItemVue from "./ConversationsListItem.vue";
 import Loader from "./Loader.vue";
 import MessagesList from "./MessagesList.vue";
-import OutputMessage from "./OutputMessage.vue";
+import MessageOutput from "./MessageOutput.vue";
 
 export default defineComponent({
   name: "Conversation",
   components: {
     Loader,
     MessagesList,
-    OutputMessage
+    MessageOutput
   },
   setup(props, context) {
     const store = useStore();
@@ -71,16 +71,16 @@ export default defineComponent({
     const messages = computed(() => store.getters.getSortedConversationMessages(conversationId?.value));
 
     const sendMessage = (message) => {
-      const outputMessage = {
+      const MessageOutput = {
         conversation_id: conversationId.value,
         message_text: message.text,
         message_type: message.type || 'message'
       }
       if (message.recipients) {
-        outputMessage.recipients = `[${message.recipients.map(r => `"${r}"`).join(',')}]`;
+        MessageOutput.recipients = `[${message.recipients.map(r => `"${r}"`).join(',')}]`;
       }
 
-      store.dispatch('sendMessage', outputMessage);
+      store.dispatch('sendMessage', MessageOutput);
     }
 
     return {

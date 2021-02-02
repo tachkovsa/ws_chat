@@ -32,7 +32,7 @@
 import { computed, defineComponent, watch, ref, reactive, onMounted } from "vue";
 
 export default defineComponent({
-  name: "OutputMessage",
+  name: "MessageOutput",
   props: {},
   setup(props, context) {
     const form = ref(null);

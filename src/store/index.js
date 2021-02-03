@@ -8,7 +8,8 @@ const state = {
   config: {
     server: null,
     user: {
-      id: "6148914691236517121" // TODO: Fetch ID via API, for now it's user73 / 73user
+      id: "6148914691236517121", // TODO: Fetch ID via API, for now it's user73 / 73user
+      conversation_id: "6827399045365194073", // TODO: Conversation ID for Teleconference
     }
   },
   app: {

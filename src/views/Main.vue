@@ -7,23 +7,30 @@
     <section class="chat-app__right-side">
       <router-view />
     </section>
+    <button class="btn-go-to-teleconference" @click="goToTeleconference">Teleconference</button>
   </main>
 </template>
 
 <script>
-import { defineComponent, onBeforeMount, onMounted, reactive, ref } from "vue";
+import { defineComponent, onBeforeMount, onMounted, reactive, ref } from 'vue';
 
-import ConversationsList from "@/components/ConversationsList.vue";
-import Header from "@/components/Header.vue";
-import { useStore } from "../store";
+import ConversationsList from '@/components/ConversationsList.vue';
+import Header from '@/components/Header.vue';
+import { useStore } from '../store';
 
 export default defineComponent({
-  name: "Main",
+  name: 'Main',
   components: {
     Header,
     ConversationsList
   },
-  setup(props, context) {
+  methods: {
+    goToTeleconference() {
+      const routConversation = this.$store.state.config.user.conversation_id;
+      this.$router.push('/teleconference/' + routConversation);
+    }
+  },
+  // setup(props, context) {
     // const state = reactive({
     //   connection: ref(),    // WebSocket
     //   originUrl: ref(""),
@@ -61,7 +68,7 @@ export default defineComponent({
     //   connect,
     //   fetchConversations
     // }
-  }
+  // }
 });
 </script>
 
@@ -74,7 +81,7 @@ export default defineComponent({
   overflow: hidden;
   border-radius: 0.25rem;
 
-  @include media(">=desktop") {
+  @include media('>=desktop') {
     width: 90%;
     height: 90%;
     border: 1px solid $color-border;
@@ -86,7 +93,7 @@ export default defineComponent({
     box-sizing: border-box;
     border-right: 1px solid $color-border;
 
-    @include media(">=tablet") {
+    @include media('>=tablet') {
       width: 30%;
       max-width: 30%;
     }
@@ -96,11 +103,22 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-  
-    @include media(">=tablet") {
+
+    @include media('>=tablet') {
       width: 70%;
       max-width: 70%;
     }
   }
+}
+.btn-go-to-teleconference {
+  display: block;
+  position: absolute;
+  right: 10rem;
+  bottom: 5rem;
+  height: 3rem;
+  line-height: 3em;
+  background-color: $color-primary;
+  color: $font-color-space;
+  text-align: center;
 }
 </style>

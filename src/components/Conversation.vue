@@ -11,20 +11,7 @@
         <div class="conversation__name">{{ conversation?.name }}</div>
       </div>
       <div class="conversation__column">
-        <div class="conversation__menu">
-          <svg
-            class="conversation__menu-icon"
-            width="14"
-            height="4"
-            viewBox="0 0 14 4"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle cx="7" cy="2" r="1.5" fill="#BDC6E0" />
-            <circle cx="2" cy="2" r="1.5" fill="#BDC6E0" />
-            <circle cx="12" cy="2" r="1.5" fill="#BDC6E0" />
-          </svg>
-        </div>
+        <div class="conversation__menu"></div>
       </div>
     </div>
     <div class="conversation__loader" v-if="!isLoaded">
@@ -40,17 +27,17 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from "vue";
-import { useRoute } from "vue-router";
+import { computed, defineComponent, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
-import { useStore } from "../store";
-import ConversationsListItemVue from "./ConversationsListItem.vue";
-import Loader from "./Loader.vue";
-import MessagesList from "./MessagesList.vue";
-import MessageOutput from "./MessageOutput.vue";
+import { useStore } from '../store';
+import ConversationsListItemVue from './ConversationsListItem.vue';
+import Loader from './Loader.vue';
+import MessagesList from './MessagesList.vue';
+import MessageOutput from './MessageOutput.vue';
 
 export default defineComponent({
-  name: "Conversation",
+  name: 'Conversation',
   components: {
     Loader,
     MessagesList,
@@ -68,20 +55,22 @@ export default defineComponent({
     const conversationId = computed(() => {
       return useRoute().params.id;
     });
-    const messages = computed(() => store.getters.getSortedConversationMessages(conversationId?.value));
+    const messages = computed(() =>
+      store.getters.getSortedConversationMessages(conversationId?.value)
+    );
 
-    const sendMessage = (message) => {
+    const sendMessage = message => {
       const MessageOutput = {
         conversation_id: conversationId.value,
         message_text: message.text,
         message_type: message.type || 'message'
-      }
+      };
       if (message.recipients) {
         MessageOutput.recipients = `[${message.recipients.map(r => `"${r}"`).join(',')}]`;
       }
 
       store.dispatch('sendMessage', MessageOutput);
-    }
+    };
 
     return {
       conversationId,
@@ -89,7 +78,7 @@ export default defineComponent({
       // getConversationById,
       conversation,
       sendMessage,
-      messages,
+      messages
     };
   }
 });
@@ -109,12 +98,12 @@ export default defineComponent({
 
   &__header {
     display: flex;
-    background-color: $color-backdrop;
     height: $header-height;
-    box-sizing: border-box;
-    border-bottom: 1px solid $color-border;
     padding-left: 1rem;
     padding-right: 1rem;
+    background-color: $color-secondary;
+    box-sizing: border-box;
+    border-bottom: 1px solid $color-border;
   }
 
   &__column {
@@ -156,7 +145,7 @@ export default defineComponent({
 
   &__name {
     font-size: $font-size-base;
-    color: $font-color-main;
+    color: $font-color-secondary;
     box-sizing: border-box;
     white-space: nowrap;
     overflow: hidden;
@@ -165,11 +154,17 @@ export default defineComponent({
 
   &__menu {
     display: flex;
-    width: 1rem;
-    justify-content: flex-end;
+    background-image: $bg-image-menu;
+    position: relative;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
 
     &:hover {
       cursor: pointer;
+      background-image: $bg-image-menu-hover;
     }
 
     &-icon {

@@ -8,8 +8,7 @@ const state = {
   config: {
     server: null,
     user: {
-      id: "6148914691236517121", // TODO: Fetch ID via API, for now it's user73 / 73user
-      conversation_id: "6827399045365194073", // TODO: Conversation ID for Teleconference
+      id: "1105387902724063510", // TODO: Fetch ID via API, for now it's user73 / 73user
     }
   },
   app: {
@@ -76,6 +75,7 @@ export const store = createStore({
               commit("addMessage", fetchedMessage);
             } else if (d.hasOwnProperty('message_id')) {
               // console.log('Waiting for process...');
+              // вставить иконку загрузки сообщения
             }
             break;
         }

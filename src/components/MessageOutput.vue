@@ -31,7 +31,7 @@ export default defineComponent({
     });
 
     const submitForm = $event => {
-      context.emit("sendMessage", message);
+      context.emit("send-message", message);
       clearForm();
     };
 

@@ -21,7 +21,7 @@
       <MessagesList :messages="messages" />
     </div>
     <div class="conversation__new-message">
-      <MessageOutput @sendMessage="sendMessage($event)" />
+      <MessageOutput @send-message="sendMessage" />
     </div>
   </section>
 </template>
@@ -29,9 +29,8 @@
 <script>
 import { computed, defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
-
 import { useStore } from '../store';
-import ConversationsListItemVue from './ConversationsListItem.vue';
+
 import Loader from './Loader.vue';
 import MessagesList from './MessagesList.vue';
 import MessageOutput from './MessageOutput.vue';
@@ -52,30 +51,31 @@ export default defineComponent({
       const id = conversationId?.value;
       return store.getters.getConversationById(id);
     });
+
     const conversationId = computed(() => {
       return useRoute().params.id;
     });
-    const messages = computed(() =>
-      store.getters.getSortedConversationMessages(conversationId?.value)
-    );
+    
+    const messages = computed(() => {
+      let sortMessages = store.getters.getSortedConversationMessages(conversationId?.value)
+      return sortMessages;
+    });
 
     const sendMessage = message => {
-      const MessageOutput = {
+      const messageOutput = {
         conversation_id: conversationId.value,
         message_text: message.text,
         message_type: message.type || 'message'
       };
       if (message.recipients) {
-        MessageOutput.recipients = `[${message.recipients.map(r => `"${r}"`).join(',')}]`;
+        messageOutput.recipients = `[${message.recipients.map(r => `"${r}"`).join(',')}]`;
       }
-
-      store.dispatch('sendMessage', MessageOutput);
+      store.dispatch('sendMessage', messageOutput);
     };
 
     return {
       conversationId,
       isLoaded,
-      // getConversationById,
       conversation,
       sendMessage,
       messages

@@ -26,7 +26,8 @@ export default defineComponent({
   },
   methods: {
     goToTeleconference() {
-      const routConversation = this.$store.state.config.user.conversation_id;
+      const routConversation = this.$route.params.id;
+      this.$store.dispatch('selectConversation', routConversation);
       this.$router.push('/teleconference/' + routConversation);
     }
   },

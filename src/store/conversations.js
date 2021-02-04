@@ -1,18 +1,16 @@
-const state = {
-  conversations: [],
-  selectedConversationId: null,
-  conversationsLoaded: false,
-}
-
 export default {
-  state,
+  state: {
+    conversations: [],
+    selectedConversationId: null,
+    conversationsLoaded: false,
+  },
   mutations: {
     setConversations(state, payload) {
       state.conversations = payload;
     },
     updateConversation(state, payload) {
       const conversationIndex = state.conversations.findIndex(c => c.id === payload.id);
-      if (conversationIndex) {
+      if (conversationIndex >= 0) {
         const conversation = state.conversations[conversationIndex].update(payload);
         state.conversations.splice(conversationIndex, 1, conversation);
       }
@@ -21,7 +19,7 @@ export default {
     addMessage(state, payload) {
       const conversationId = payload.conversation?.id;
       const conversationIndex = state.conversations.findIndex(c => c.id === conversationId);
-      if (conversationIndex) {
+      if (conversationIndex >= 0) {
         const conversation = state.conversations[conversationIndex].update(payload.conversation);
         conversation.messages.push(payload);
         state.conversations.splice(conversationIndex, 1, conversation);
@@ -60,17 +58,15 @@ export default {
     },
     getSortedConversationMessages: (state, getters) => id => {
       const messages = getters.getConversationMessages(id);
-      return messages
-        .sort((a, b) => {
-          if (!isNaN(b.createDate.getTime()) && !isNaN(a.createDate.getTime())) {
-            return b.createDate?.getTime() - a.createDate?.getTime();
-          } else if (!isNaN(b.createDate.getTime())) {
-            return 1;
-          } else {
-            return -1;
-          }
-        })
-        .reverse();
+      return messages.sort((a, b) => {
+        if (!isNaN(b.createDate.getTime()) && !isNaN(a.createDate.getTime())) {
+          return b.createDate?.getTime() - a.createDate?.getTime();
+        } else if (!isNaN(b.createDate.getTime())) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }).reverse();
     }
   }
 };

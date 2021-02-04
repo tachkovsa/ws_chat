@@ -114,7 +114,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (isLast) {
-        context.emit('lastMessageRendered', message.id);
+        context.emit('last-message-rendered', message.id);
       }
     });
 

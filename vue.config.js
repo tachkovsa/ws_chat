@@ -1,4 +1,4 @@
-const serverUrl = 'https://tsa.websoft.ru/';
+const serverUrl = 'https://tsa.websoft.ru/';//'http://localhost:80/'//
 
 module.exports = {
   lintOnSave: false,
@@ -24,3 +24,5 @@ module.exports = {
   },
   assetsDir: '@/assets/',
 };
+
+// http://localhost:8080/view_doc.html?mode=default (page registration) => http://localhost:8080/#/

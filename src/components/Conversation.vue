@@ -8,7 +8,7 @@
         ></div>
       </div>
       <div class="conversation__column">
-        <div class="conversation__name">{{ conversation?.name }}</div>
+        <h2 class="conversation__name">{{ conversation?.name }}</h2>
       </div>
       <div class="conversation__column">
         <div class="conversation__menu"></div>
@@ -72,7 +72,6 @@ export default defineComponent({
       }
       store.dispatch('sendMessage', messageOutput);
     };
-
     return {
       conversationId,
       isLoaded,
@@ -98,12 +97,11 @@ export default defineComponent({
 
   &__header {
     display: flex;
-    height: $header-height;
+    height: $header-height-main;
     padding-left: 1rem;
     padding-right: 1rem;
     background-color: $color-secondary;
     box-sizing: border-box;
-    border-bottom: 1px solid $color-border;
   }
 
   &__column {
@@ -144,7 +142,7 @@ export default defineComponent({
   }
 
   &__name {
-    font-size: $font-size-base;
+    font-size: $font-size-h2;
     color: $font-color-secondary;
     box-sizing: border-box;
     white-space: nowrap;
@@ -153,14 +151,7 @@ export default defineComponent({
   }
 
   &__menu {
-    display: flex;
-    background-image: $bg-image-menu;
-    position: relative;
-    width: 1.5rem;
-    height: 1.5rem;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
+    @extend %menu__button_hamburger;
 
     &:hover {
       cursor: pointer;

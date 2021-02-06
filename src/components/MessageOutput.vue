@@ -20,18 +20,18 @@
 import { computed, defineComponent, watch, ref, reactive, onMounted } from 'vue';
 
 export default defineComponent({
-  name: "MessageOutput",
+  name: 'MessageOutput',
   props: {},
   setup(props, context) {
     const form = ref(null);
     const fileInput = ref(null);
 
     const message = reactive({
-      text: ""
+      text: ''
     });
 
     const submitForm = $event => {
-      context.emit("send-message", message);
+      context.emit('send-message', message);
       clearForm();
     };
 
@@ -39,9 +39,7 @@ export default defineComponent({
       form.value.reset();
     };
 
-    onMounted(() => {
-      
-    });
+    onMounted(() => {});
 
     return {
       form,
@@ -53,15 +51,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@mixin bg-image() {
-  border: none;
-  outline: none;
-  background-color: transparent;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 .message-output {
   display: flex;
   flex-direction: column;
@@ -98,8 +87,8 @@ export default defineComponent({
     height: 1.8rem;
     width: 1.8rem;
     background-image: $bg-image-send-message;
-    @include bg-image();
-
+    @include bg-image-button();
+   
     &:not(:disabled) {
       background-image: $bg-image-send-message-not-disabled;
     }
@@ -142,7 +131,7 @@ export default defineComponent({
     height: 2rem;
     width: 2rem;
     background-image: $bg-image-attach-file;
-    @include bg-image();
+    @include bg-image-button();
   }
 }
 </style>

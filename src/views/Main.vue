@@ -93,6 +93,7 @@ export default defineComponent({
     flex-direction: column;
     box-sizing: border-box;
     border-right: 1px solid $color-border;
+    border: none;
 
     @include media('>=tablet') {
       width: 30%;

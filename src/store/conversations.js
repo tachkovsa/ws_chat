@@ -3,6 +3,7 @@ export default {
     conversations: [],
     selectedConversationId: null,
     conversationsLoaded: false,
+    conversationsHeader: 'Мои разговоры'
   },
   mutations: {
     setConversations(state, payload) {
@@ -48,6 +49,7 @@ export default {
     }
   },
   getters: {
+    getConversationsHeader: state => state.conversationsHeader,
     getConversationLoading: state => state.conversationsLoaded,
     getConversations: state => state.conversations,
     getConversationById: (state, getters) => id => getters.getConversations.find(c => c.id === id),

@@ -1,39 +1,21 @@
 <template>
+  <ConversationsListHeader />
   <div class="header">
     <div class="header__search">
       <input class="header__input" type="text" placeholder="Поиск" />
-      <svg
-        class="header__search-icon"
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M7 13C10.3137 13 13 10.3137 13 7C13 3.68629 10.3137 1 7 1C3.68629 1 1 3.68629 1 7C1 10.3137 3.68629 13 7 13Z"
-          stroke="#8C98B5"
-          stroke-width="2"
-        />
-        <path d="M15 15L12 12" stroke="#8C98B5" stroke-width="2" stroke-linecap="round" />
-      </svg>
-    </div>
-    <div class="header__menu">
-      <svg
-        class="header__menu-icon"
-        width="14"
-        height="4"
-        viewBox="0 0 14 4"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle cx="7" cy="2" r="1.5" fill="#BDC6E0" />
-        <circle cx="2" cy="2" r="1.5" fill="#BDC6E0" />
-        <circle cx="12" cy="2" r="1.5" fill="#BDC6E0" />
-      </svg>
     </div>
   </div>
 </template>
+
+<script>
+import ConversationsListHeader from './ConversationsListHeader.vue';
+
+export default {
+  components: {
+    ConversationsListHeader
+  }
+}
+</script>
 
 <style scoped lang="scss">
 .header {
@@ -44,12 +26,12 @@
   box-sizing: border-box;
   justify-content: space-between;
   align-items: center;
-  height: $header-height;
+  height: 2.8rem;
   background-color: $color-backdrop;
   border-bottom: 1px solid $color-border;
-  padding: 0.5rem 1rem;
 
   &__search {
+    height: 100%;
     display: flex;
     flex-grow: 1;
     color: $font-color-secondary;
@@ -58,16 +40,30 @@
     position: relative;
 
     #{$header}__input {
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid $color-border;
-      border-radius: 0.25rem;
-      line-height: 1rem;
-      font-size: $font-size-base;
-      font-family: inherit;
+      flex-grow: 1;
+      font-size: 1rem;
+      border: none;
       outline: none;
-      height: 1.5rem;
-      padding: 0 0.25rem 0 1.8rem;
+      box-sizing: border-box;
+      padding: .5rem 3.6rem .5rem 1rem;
+      transition: all .3s ease-out;
+      background-size: 2rem;
+      background-position-x: calc(100% - 1rem);
+      background-position-y: center;
+      background-repeat: no-repeat;
+      color: $font-color-secondary;
+      background-color: $color-secondary;
+      border-bottom: 1px solid $color-secondary;
+
+      @include input-placeholder { 
+        color: $font-color-secondary;
+        font-size: 0.9rem;
+      };
+
+      &:focus {
+        background-color: $bg-color-input-focused;
+        color: $font-color-input-unfocused;
+      }
     }
 
     &-icon {

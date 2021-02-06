@@ -63,8 +63,11 @@ export default defineComponent({
 
     // const mediaConnector = new window.WTKurentoMediaConnector(false);
 
+    // запрос доступа к камере и микрофону
     const connect = (config) => {
-      config = config || state.mediaConnector.Config;
+      debugger
+      // config = config || state.mediaConnector.Config;
+      config = { SendVideo: false, SendAudio: true }
 
       if (state.mediaConnector.Status) {
         state.mediaConnector.Disconnect(() => {

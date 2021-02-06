@@ -1,0 +1,57 @@
+$color-primary: #315DFA;
+$color-secondary: #3598DB;
+$color-backdrop: #F7F8FE;
+$color-border: #D1DCF8;
+$color-space: #E6EAF6;
+
+$font-family: Roboto, Arial, sans-serif;
+$font-color-main: #111A2C;
+$font-color-dark: #5C657D;
+$font-color-light: #BDC6E0;
+$font-color-secondary: #FFFFFF;
+$font-color-space: #FFFFFF;
+$font-color-input-unfocused: #111A2C;
+
+$font-size-biggest: 3rem;
+$font-size-bigger: 1.3rem;
+$font-size-big: 1.143rem;
+$font-size-base: 14px;
+$font-size-small: 0.85rem;
+$font-size-smaller: 0.786rem;
+$font-size-smallest: 0.643rem;
+
+$font-size-h1: $font-size-biggest;
+$font-size-h2: $font-size-bigger;
+$font-size-h3: $font-size-big;
+$font-size-h4: $font-size-base;
+
+$gap-biggest: $font-size-biggest;
+$gap-bigger: $font-size-bigger;
+$gap-big: $font-size-big;
+$gap-base: $font-size-base;
+$gap-small: $font-size-small;
+$gap-smaller: $font-size-smaller;
+$gap-smallest: $font-size-smallest;
+
+$bg-color-input-focused: #FFFFFF;
+$bg-color-header-menu: #FFFFFF;
+
+$border-color-header-menu:#999999;
+
+$header-height-main: 3.6rem;
+
+$breakpoint-phone: 640px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoints: (
+    phone: $breakpoint-phone,
+    tablet: $breakpoint-tablet,
+    desktop: $breakpoint-desktop) !default;
+
+// $font-size-biggest: 1.375rem;
+// $font-size-bigger: 1.25rem;
+// $font-size-big: 1.125rem;
+// $font-size-base: 16px;
+// $font-size-small: 0.875rem;
+// $font-size-smaller: 0.75rem;
+// $font-size-smallest: 0.625rem;

@@ -3,9 +3,7 @@
 </template>
 
 <script>
-import {
-  defineComponent, onBeforeMount, onMounted, reactive, ref, watch, computed, provide
-} from 'vue';
+import { defineComponent, onBeforeMount, onMounted, reactive, ref, watch, computed, provide } from 'vue';
 import { useStore } from './store';
 
 export default defineComponent({

@@ -10,8 +10,14 @@
       <div class="conversation__column">
         <h2 class="conversation__name">{{ conversation?.name }}</h2>
       </div>
-      <div class="conversation__column">
-        <div class="conversation__menu"></div>
+      <div class="conversation__column conversation__column--menu">
+        <the-menu-burger
+          :menu-burger-visible="menuVisible"
+          :menu-burger-options="menuOptions"
+          @trigger-menu-burger="triggerMenu"
+          @hide-menu-burger="hideMenu"
+        >
+        </the-menu-burger>
       </div>
     </div>
     <div class="conversation__loader" v-if="!isLoaded">
@@ -34,13 +40,32 @@ import { useStore } from '../store';
 import Loader from './Loader.vue';
 import MessagesList from './MessagesList.vue';
 import MessageOutput from './MessageOutput.vue';
+import TheMenuBurger from './TheMenuBurger.vue';
 
 export default defineComponent({
   name: 'Conversation',
+  data() {
+    return {
+      menuVisible: false,
+      menuOptions: [
+        { action: 'add_participant_conversation', label: 'Добавить участников разговора' },
+        { action: 'del_participant_conversation', label: 'Удалить участников разговора' }
+      ],
+    }
+  },
+  methods: {
+    triggerMenu() {
+      this.menuVisible = !this.menuVisible;
+    },
+    hideMenu() {
+      this.menuVisible = false;
+    }
+  },
   components: {
     Loader,
     MessagesList,
-    MessageOutput
+    MessageOutput,
+    TheMenuBurger
   },
   setup(props, context) {
     const store = useStore();
@@ -133,6 +158,10 @@ export default defineComponent({
     }
   }
 
+  &__column--menu {
+    overflow: visible;
+  }
+
   &__image {
     width: 2rem;
     height: 2rem;
@@ -148,19 +177,6 @@ export default defineComponent({
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  &__menu {
-    @extend %menu__button_hamburger;
-
-    &:hover {
-      cursor: pointer;
-      background-image: $bg-image-menu-hover;
-    }
-
-    &-icon {
-      transform: rotate(90deg);
-    }
   }
 
   &__messages {

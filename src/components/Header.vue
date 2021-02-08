@@ -2,7 +2,7 @@
   <ConversationsListHeader />
   <div class="header" v-if="searchVisible">
     <div class="header__search">
-      <input class="header__input" type="text" placeholder="Поиск" />
+      <input class="header__input" type="text" :placeholder="searchPlaceholder" v-model="searchValue" />
     </div>
   </div>
 </template>
@@ -14,9 +14,22 @@ export default {
   components: {
     ConversationsListHeader
   },
+  data() {
+    return {
+      searchValue: ''
+    }
+  },
+  watch: {
+    searchValue(value) {
+      this.$store.dispatch('filterConversations', value);
+    }
+  },
   computed: {
     searchVisible() {
       return this.$store.getters.getHeaderSearchVisible;
+    },
+    searchPlaceholder() {
+      return this.$store.getters.getHeaderSearchPlaceholder;
     }
   }
 }

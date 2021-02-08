@@ -58,9 +58,17 @@ export default {
     },
     selectMenuOption(mode) {
       this.menuMode = mode;
+      switch (mode) {
+        case 'request':
+        case 'chat':
+          this.$store.dispatch('fetchConversations', mode);
+          break;
+        case 'go_home':
+          window.location.href = window.location.origin; //TODO: add link to home page
+      }
       if (mode === 'request') { 
         // this.$store.dispatch('setHeaderSearchVisible', false);
-        this.$store.dispatch('fetchConversations', mode);
+        
       } else {
         // this.$store.dispatch('setHeaderSearchVisible', true);
         this.$store.dispatch('fetchConversations');

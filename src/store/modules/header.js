@@ -1,7 +1,8 @@
 export default {
   state() {
     return {
-      headerSearchVisible: true
+      headerSearchVisible: true,
+      headerSearchPlaceholder: 'Поиск'
     }
   },
   mutations: {
@@ -15,6 +16,7 @@ export default {
     }
   },
   getters: {
-    getHeaderSearchVisible: (state) => state.headerSearchVisible
+    getHeaderSearchVisible: (state) => state.headerSearchVisible,
+    getHeaderSearchPlaceholder: (state) => state.headerSearchPlaceholder,
   }
 }

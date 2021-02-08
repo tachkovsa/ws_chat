@@ -2,8 +2,9 @@ export default {
   state() {
     return {
       conversations: [],
+      conversationsFiltered: [],
+      conversationsLoaded: false,
       selectedConversationId: null,
-      conversationsLoaded: false
     };
   },
   mutations: {
@@ -13,8 +14,8 @@ export default {
     updateConversation(state, payload) {
       const conversationIndex = state.conversations.findIndex(c => c.id === payload.id);
       if (conversationIndex >= 0) {
-          const conversation = state.conversations[conversationIndex].update(payload);
-          state.conversations.splice(conversationIndex, 1, conversation);
+        const conversation = state.conversations[conversationIndex].update(payload);
+        state.conversations.splice(conversationIndex, 1, conversation);
       }
     },
     addMessage(state, payload) {
@@ -35,17 +36,26 @@ export default {
   },
   actions: {
     fetchConversations({ commit, state }, objectType) {
-      commit("setConversationLoadingState", false);
-      this.dispatch("sendWebSocket", { action: "get_my_conversations", object_type: objectType }); //object_type: objectType
+      commit('setConversationLoadingState', false);
+      this.dispatch('sendWebSocket', { action: 'get_my_conversations', object_type: objectType });
     },
     selectConversation({ commit, state }, conversationId) {
-      commit("selectConversation", conversationId);
+      commit('selectConversation', conversationId);
     },
     sendMessage({ commit, state }, message) {
-      this.dispatch("sendWebSocket", {
-        action: "send_message",
+      this.dispatch('sendWebSocket', {
+        action: 'send_message',
         ...message
       });
+    },
+    filterConversations({ commit, state }, keyword) {
+      if (!!keyword) {
+        state.conversationsFiltered = state.conversations.filter((item) => {
+          return item?.name && item.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1;
+        });
+      } else {
+        state.conversationsFiltered = state.conversations;
+      }
     }
   },
   getters: {
@@ -69,5 +79,6 @@ export default {
           }
       }).reverse();
     },
+    getConversationsFiltered: state => state.conversationsFiltered,
   }
 };

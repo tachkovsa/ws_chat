@@ -6,7 +6,7 @@
     <div
       v-else
       class="conversations-list__item"
-      v-for="conversation of conversations"
+      v-for="conversation of conversationsFiltered"
       :key="conversation.id"
       v-bind:class="{
         'conversations-list__item--selected': conversation.id === selectedConversationId
@@ -35,18 +35,26 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore();
     const router = useRouter();
+
     const isLoaded = computed(() => store.getters.getConversationLoading);
 
-    const conversations = computed(() => store.getters.getConversations);
+    const conversationsFiltered = computed(() => {
+      const conversations = store.getters.getConversationsFiltered;
+      if (conversations.length > 0) {
+        return conversations;
+      } else {
+        return store.getters.getConversations;
+      }
+    });
+
     const selectedConversationId = computed(() => {
       const conversationId = store.getters.getSelectedConversationId;
       if (conversationId) {
         router.push({ path: `/conversation/${conversationId}` });
       }
-
       return conversationId;
     });
-
+    
     function selectConversation(conversationId) {
       store.dispatch("selectConversation", conversationId);
     }
@@ -54,7 +62,7 @@ export default defineComponent({
     return {
       router,
       isLoaded,
-      conversations,
+      conversationsFiltered,
       selectedConversationId,
       selectConversation
     };

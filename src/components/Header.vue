@@ -1,6 +1,6 @@
 <template>
   <ConversationsListHeader />
-  <div class="header">
+  <div class="header" v-if="searchVisible">
     <div class="header__search">
       <input class="header__input" type="text" placeholder="Поиск" />
     </div>
@@ -13,6 +13,11 @@ import ConversationsListHeader from './ConversationsListHeader.vue';
 export default {
   components: {
     ConversationsListHeader
+  },
+  computed: {
+    searchVisible() {
+      return this.$store.getters.getHeaderSearchVisible;
+    }
   }
 }
 </script>

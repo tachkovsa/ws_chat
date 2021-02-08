@@ -22,14 +22,11 @@ export default defineComponent({
       isConnected: computed(() => store.getters.getConnectionState),
     });
 
-    watch(
-      () => state.isConnected,
-      (current, previous) => {
-        if (current && !previous) {
-          fetchConversations();
-        }
+    watch(() => state.isConnected, (current, previous) => {
+      if (current && !previous) {
+        fetchConversations();
       }
-    );
+    });
 
     function connect(url) {
       store.dispatch('connect', { url });
@@ -47,19 +44,6 @@ export default defineComponent({
     onMounted(() => {
       const wsUrl = state.originUrl.replace(/(http)(s)?\:\/\//, 'ws$2://');
       connect(`${wsUrl}/services/chat_ws_service`);
-
-      // state.connection.onopen = (event) => {
-      //   state.isConnected = true;
-      //   fetchConversations();
-      // };
-
-      // state.connection.onmessage = (event) => {
-      //   store.dispatch('handleWebSocket', event);
-      // };
-
-      // state.connection.onclose = (event) => {
-      //   state.isConnected = false;
-      // };
     });
 
     return {

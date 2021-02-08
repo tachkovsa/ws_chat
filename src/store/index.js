@@ -2,7 +2,8 @@ import { createStore } from "vuex";
 import { Conversation } from "../models/conversation.model";
 import { Message } from "../models/message.model";
 
-import conversations from './modules/conversations/conversations';
+import conversations from './modules/conversations';
+import header from './modules/header';
 
 export const store = createStore({
   state() {
@@ -40,7 +41,6 @@ export const store = createStore({
 
       commit("setConnection", connection);
     },
-
     sendWebSocket({ commit, state }, payload) {
       const connection = state.app.connection;
       const jsonPayload = JSON.stringify(payload);
@@ -57,14 +57,12 @@ export const store = createStore({
             const fetchedConversations = d.conversations.map(c => new Conversation(c)) || []; // TODO: map()
 
             fetchedConversations.sort((a, b) => {
-              if (!isNaN(b.lastUnreadMessageDate.getTime()) &&
-                  !isNaN(a.lastUnreadMessageDate.getTime())
-              ) {
-                  return b.lastUnreadMessageDate ?.getTime() - a.lastUnreadMessageDate ?.getTime();
+              if (!isNaN(b.lastUnreadMessageDate.getTime()) && !isNaN(a.lastUnreadMessageDate.getTime())) {
+                return b.lastUnreadMessageDate ?.getTime() - a.lastUnreadMessageDate ?.getTime();
               } else if (!isNaN(b.lastUnreadMessageDate.getTime())) {
-                  return 1;
+                return 1;
               } else {
-                  return -1;
+                return -1;
               }
             });
 
@@ -92,7 +90,8 @@ export const store = createStore({
     getCurrentUserId: state => state.config.user.id
   },
   modules: {
-    conversations
+    conversations,
+    header
   }
 });
 

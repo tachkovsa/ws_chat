@@ -9,10 +9,12 @@
     </div>
     <div class="conversations-list-header__column">
       <the-menu-burger
+        :menu-burger-mode="menuMode"
         :menu-burger-visible="menuVisible"
         :menu-burger-options="menuOptions"
         @trigger-menu-burger="triggerMenu"
         @hide-menu-burger="hideMenu"
+        @select-menu-burger-option="selectMenuOption"
       >
         <template v-slot:default>
           <li class="conversation-menu__item conversation-menu__item--essential">{{ userFullName }}</li>
@@ -33,12 +35,18 @@ export default {
     return {
       header: 'Мои разговоры',
       userFullName: 'Анисимов Геннадий Федорович',
+      menuMode: 'chat',
       menuVisible: false,
-      menuOptions: [
+      menuOptionsInit: [
         { action: 'chat', label: 'Мои разговоры' }, 
-        { action: 'requests', label: 'Разговоры по заявкам' },
+        { action: 'request', label: 'Разговоры по заявкам' },
         { action: 'go_home', label: 'Вернуться на главную' }
       ],
+    }
+  },
+  computed: {
+    menuOptions() {
+      return this.menuOptionsInit.filter(option => option.action !== this.menuMode);
     }
   },
   methods: {
@@ -47,6 +55,16 @@ export default {
     },
     hideMenu() {
       this.menuVisible = false;
+    },
+    selectMenuOption(mode) {
+      this.menuMode = mode;
+      if (mode === 'request') { 
+        // this.$store.dispatch('setHeaderSearchVisible', false);
+        this.$store.dispatch('fetchConversations', mode);
+      } else {
+        // this.$store.dispatch('setHeaderSearchVisible', true);
+        this.$store.dispatch('fetchConversations');
+      }
     }
   }
 }

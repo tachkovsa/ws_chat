@@ -1,4 +1,4 @@
-const serverUrl = 'https://tsa.websoft.ru/';//'http://localhost:80/'//
+const serverUrl = 'http://localhost:80/';//  'https://tsa.websoft.ru/'
 
 module.exports = {
   lintOnSave: false,
